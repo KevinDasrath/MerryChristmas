@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Image with Music</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .interaction-screen, .alert-screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #fff;
+            font-family: Arial, sans-serif;
+        }
+
+        .interaction-screen {
+            display: flex;
+        }
+
+        .image-screen {
+            display: none;
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+
+        .image-screen img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            transform-origin: center;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .overlay img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <div class="interaction-screen">
+        <h1>Merry Christmas Lindsey!</h1>
+        <button id="start-btn">Click Me</button>
+    </div>
+
+    <div class="alert-screen">
+        <h1>Please Rotate Your Device</h1>
+        <button id="proceed-btn">Proceed</button>
+    </div>
+
+    <div class="image-screen">
+        <img id="main-image" src="card.jpg" alt="Fullscreen Image"> 
+        <div class="overlay">
+            <img id='snow' src="giphy.gif" alt="Overlay GIF">
+        </div>
+    </div>
+
+    <audio id="background-music" loop src="Wham! - Last Christmas (Official Video).mp3"></audio>
+
+    <script>
+        const interactionScreen = document.querySelector('.interaction-screen');
+        const alertScreen = document.querySelector('.alert-screen');
+        const imageScreen = document.querySelector('.image-screen');
+        const startBtn = document.getElementById('start-btn');
+        const proceedBtn = document.getElementById('proceed-btn');
+        const mainImage = document.getElementById('main-image');
+        const backgroundMusic = document.getElementById('background-music');
+
+        function checkOrientation() {
+            if (window.innerWidth < window.innerHeight) {
+                alertScreen.style.display = 'flex';
+                imageScreen.style.display = 'none';
+                mainImage.style.transform = 'rotate(90deg)';
+                mainImage.style.objectFit = 'cover'; 
+            } else {
+                alertScreen.style.display = 'none';
+                imageScreen.style.display = 'flex';
+                mainImage.style.transform = 'none';
+            }
+        }
+
+        startBtn.addEventListener('click', () => {
+            interactionScreen.style.display = 'none';
+            checkOrientation();
+            backgroundMusic.play().catch(() => {
+                console.log("User interaction required to play music.");
+            });
+        });
+
+        proceedBtn.addEventListener('click', () => {
+            alertScreen.style.display = 'none';
+            imageScreen.style.display = 'flex';
+        });
+
+        window.addEventListener('resize', checkOrientation);
+    </script>
+</body>
+</html>
